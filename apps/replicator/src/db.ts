@@ -293,6 +293,7 @@ export type CastRow = {
   embeds: ColumnType<CastEmbedJson[], string, string>;
   mentions: ColumnType<Fid[], string, string>;
   mentionsPositions: ColumnType<number[], string, string>;
+  reactionsCount: number;
 };
 
 // REACTIONS ---------------------------------------------------------------------------------------

@@ -153,6 +153,16 @@ const { processAdd, processRemove } = buildAddRemoveMessageProcessor<
   },
   async onAdd({ data: reaction, isCreate, trx, skipSideEffects }) {
     // Update any other derived data
+    // add reactionsCount to the cast
+    if (reaction.targetCastHash) {
+      await trx
+        .updateTable("casts")
+        .set({
+          reactionsCount: sql`reaction_count + 1`,
+        })
+        .where("hash", "=", reaction.targetCastHash)
+        .execute();
+    }
 
     if (!skipSideEffects) {
       // Trigger any one-time side effects (push notifications, etc.)
@@ -160,6 +170,16 @@ const { processAdd, processRemove } = buildAddRemoveMessageProcessor<
   },
   async onRemove({ data: reaction, trx }) {
     // Update any other derived data in response to removal
+    // remove reactionsCount from the cast
+    if (reaction.targetCastHash) {
+      await trx
+        .updateTable("casts")
+        .set({
+          reactionsCount: sql`reaction_count - 1`,
+        })
+        .where("hash", "=", reaction.targetCastHash)
+        .execute();
+    }
   },
 });
 
