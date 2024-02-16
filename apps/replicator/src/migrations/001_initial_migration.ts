@@ -305,6 +305,8 @@ export const up = async (db: Kysely<any>) => {
     .addColumn("embeds", "json", (col) => col.notNull().defaultTo(sql`'[]'`))
     .addColumn("mentions", "json", (col) => col.notNull().defaultTo(sql`'[]'`))
     .addColumn("mentionsPositions", "json", (col) => col.notNull().defaultTo(sql`'[]'`))
+    // add a reactionsCount column to the casts table
+    .addColumn("reactionsCount", sql`integer`, (col) => col.notNull().defaultTo(0))
     .addForeignKeyConstraint("casts_fid_foreign", ["fid"], "fids", ["fid"], (cb) => cb.onDelete("cascade"))
     .$call((qb) =>
       PARTITIONS
